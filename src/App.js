@@ -17,7 +17,7 @@ function App() {
        
       <Switch>
         <Route exact path="/" component={Dashboard}/>
-        <Route path="/add" component={ActivityForm}/>
+        <Route path="/" component={ActivityForm}/>
         <Route path="/edit/:id" component={EditActivity}/>
       </Switch>
     </div>

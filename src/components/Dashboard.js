@@ -1,10 +1,32 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import "../assets/dashboard.css"
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+// import { getPosts } from '../actions/posts';
+import Form from './ActivityForm';
+import { counterPost, deletePost, getPosts } from '../actions/posts';
+import ActivityForm from './ActivityForm';
+
 
 const Dashboard = () => {
-    const activities= useSelector(state=> state)
+    // const activities = useSelector(state=> state)
+    const dispatch = useDispatch();
+    
+    const [currentId, setCurrentId] = useState(0);
+    const posts = (state) => state.posts
+    
+    useEffect(() => {
+        dispatch(getPosts());
+      }, [currentId, dispatch]); 
+      
+      
+
+      const [postData, setPostData] = useState({ activity: '', date: '', name: '', duration: '', description: '' });
+    
+  const post = useSelector((state) => (currentId ? state.posts.find((message) => message._id === currentId) : null));
+
+  
+
     return (
         
         <>
@@ -229,9 +251,11 @@ const Dashboard = () => {
                            <a href="./activity-form.html" className="las la-edit"> </a>
                          </div>
                          <div className="card-done">
-                             {activities.map((activity, id)=>(
-                             <Link to={`/edit/${activity.id}`} className="las la-check-circle"> </Link>
-                             ))}
+                         {/* {posts.map((post) => (
+                                <ul>
+                                <Dashboard post={post} setCurrentId={setCurrentId} />
+                                </ul>
+                            ))} */}
                          </div>
 
                      </div>
@@ -289,15 +313,15 @@ const Dashboard = () => {
                          
                      </tr> */}
                      {
-                         activities.map((activity, id)=>(
-                             <tr key={id}>
-                                 <td>{id+1}</td>
-                                 <td>{activity.name}</td>
-                                 <td>{activity.activityType}</td>
-                                 <td>{activity.duration}</td>
-                                 <td>{activity.selectedDate}</td>
+                         
+                             <tr>
+                                 <td>1</td>
+                                 <td>{postData.name}</td>
+                                 <td>{postData.activity}</td>
+                                 <td>{postData.duration}</td>
+                                 <td>{postData.date}</td>
                              </tr>
-                         ))
+                        
                      }
                      {/* <tr className="active-row">
                          <td>2</td>
@@ -353,6 +377,7 @@ const Dashboard = () => {
                  </tbody>
              </table>
          </section>
+         <ActivityForm currentId={currentId} setCurrentId={setCurrentId} posts={posts} postData={postData} setPostData={setPostData} post={post} />
          </main>
          </div>
          </>
